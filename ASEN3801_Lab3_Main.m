@@ -1,7 +1,7 @@
 % ASEN 2803 Rotary Arm Lab 3
 % Authors: Brooklyn O'Laughlin, Andrew Gonzalez, Riley Martin, Ashton Unzicker
 % Date: 4/8/2024
-
+% Blah
 % House Cleaning
 close all; clc; clear
 
