@@ -1,56 +1,293 @@
 % Contributors: Owen Storer, Bridger Cushman, Andrew Gonzalez, Sean Sharp
 % Assignment: 3801 Lab 3
 
-% Housekeeping
+% House Cleaning
 clear;clc;close all
 
-%% Loading all unique data files in
+% Toggle Switch
+BaseSwitch =	0;
+Control1Switch= 0;
+Control2Switch= 0;
+Control3Switch= 0;
+Control4Switch= 0;
+Control5Switch= 0;
+Control6Switch= 0;
+Gyro1Switch =	0;
+Gyro2Switch =	0;
+Gyro3Switch =	0;
+Gyro4Switch =	0;
+Gyro5Switch =	1;
+Gyro6Switch =	0;
+Rwheel1Switch = 0;
+Rwheel2Switch = 0;
+
+%% BASE RUN
 
 % Loading Base Run
 [Time_BASE,Data_BASE] = LoadData_BASE('Lab 3 Data/BASE_T10.csv');
-%time = time/1000; % Time array now in seconds
+p = polyfit(Data_BASE(:,1),Data_BASE(:,2),1);
+val_b_BASE = p(2);% This is the bias in the Gyro
+val_k_BASE = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_BASE(:,1));
 
-% Loading Control1 Run with k1 = 50, k2 = 15, k3 = 0
-[Time_CONTROL1,Data_CONTROL1] = LoadData('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
+% Finding min/max values for plots and slope
+min_BASE = min(Data_BASE(:,1));
+max_BASE = max(Data_BASE(:,1));
+minPolyline_BASE = min(Polyline);
+maxPolyline_BASE = max(Polyline);
 
-% Loading Control2 Run with k1 = 100, k2 = 15, k3 = 0
-[Time_CONTROL2,Data_CONTROL2] = LoadData('Lab 3 Data/CONTROL_K1_100_K2_15_K3_0.csv');
+Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
 
-% Loading Control3 Run with k1 = 100, k2 = 40, k3 = 0
-[Time_CONTROL3,Data_CONTROL3] = LoadData('Lab 3 Data/CONTROL_K1_100_K2_40_K3_0.csv');
+%% CONTROL RUNS
 
-% Loading Control4 Run with k1 = 100, k2 = -10, k3 = 0
-[Time_CONTROL4,Data_CONTROL4] = LoadData('Lab 3 Data/CONTROL_K1_100_K2_neg10_K3_0.csv');
+% Loading Control1 Run with k1(proportional) = 50, k2(derivative) = 15, k3(integral) = 0
+[Time_CONTROL1,Data_CONTROL1] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
 
-% Loading Control5 Run with k1 = 150, k2 = 15, k3 = 0
-[Time_CONTROL5,Data_CONTROL5] = LoadData('Lab 3 Data/CONTROL_K1_150_K2_15_K3_0.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Control2 Run with k1(proportional) = 100, k2(derivative) = 15, k3(integral) = 0
+[Time_CONTROL2,Data_CONTROL2] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_15_K3_0.csv');
 
-% Loading Control6 Run with k1 = 200, k2 = 0, k3 = 0
-[Time_CONTROL6,Data_CONTROL6] = LoadData('Lab 3 Data/CONTROL_K1_200_K2_0_K3_0.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Control3 Run with k1(proportional) = 100, k2(derivative) = 40, k3(integral) = 0
+[Time_CONTROL3,Data_CONTROL3] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_40_K3_0.csv');
 
-% Loading Gyro1 Run with Auto F = 0.2, C = 0.5
-[Time_GYRO1,Data_GYRO1] = LoadData('Lab 3 Data/GYRO_AUTO_F0pt2_C0pt5.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Control4 Run with k1(proportional) = 100, k2(derivative) = -10, k3(integral) = 0
+[Time_CONTROL4,Data_CONTROL4] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_neg10_K3_0.csv');
 
-% Loading Gyro2 Run with Auto F = 0.2, C = 1
-[Time_GYRO2,Data_GYRO2] = LoadData('Lab 3 Data/GYRO_AUTO_F0pt2_C1.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Control5 Run with k1(proportional) = 150, k2(derivative) = 15, k3(integral) = 0
+[Time_CONTROL5,Data_CONTROL5] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_150_K2_15_K3_0.csv');
 
-% Loading Gyro3 Run with Auto F = 1, C = 0.5
-[Time_GYRO3,Data_GYRO3] = LoadData('Lab 3 Data/GYRO_AUTO_F1_C0pt5.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Control6 Run with k1(proportional) = 200, k2(derivative) = 0, k3(integral) = 0
+[Time_CONTROL6,Data_CONTROL6] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_200_K2_0_K3_0.csv');
 
-% Loading Gyro4 Run with Manual F = 0.2, C = 0.5
-[Time_GYRO4,Data_GYRO4] = LoadData('Lab 3 Data/GYRO_MAN_F0pt2_C0pt5.csv');
+%% GYRO RUNS
 
-% Loading Gyro5 Run with Manual F = 0.2, C = 1
-[Time_GYRO5,Data_GYRO5] = LoadData('Lab 3 Data/GYRO_MAN_F0pt2_C1.csv');
+% Loading Gyro1 Run with Auto Frequency = 0.2, Current = 0.5
+[Time_GYRO1,Data_GYRO1] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F0pt2_C0pt5.csv');
+p = polyfit(Data_GYRO1(:,1),Data_GYRO1(:,2),1);
+val_b_GYRO1 = p(2);% This is the bias in the Gyro
+val_k_GYRO1 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO1(:,1));
 
-% Loading Gyro6 Run with Manual F = 1, C = 0.5
-[Time_GYRO6,Data_GYRO6] = LoadData('Lab 3 Data/GYRO_MAN_F1_C0pt5.csv');
+% Finding min/max values for plots and slope
+min_GYRO1 = min(Data_GYRO1(:,1));
+max_GYRO1 = max(Data_GYRO1(:,1));
+minPolyline_GYRO1 = min(Polyline);
+maxPolyline_GYRO1 = max(Polyline);
 
-% Loading Reaction Wheel Test Run with T = 0.2
-[Time_RWHEEL1,Data_RWHEEL1] = LoadData('Lab 3 Data/RWHEEL_T0pt2_Test.csv');
+Calibrated_Data_GYRO1 = (Data_GYRO1(:,2) - val_b_GYRO1)/val_k_GYRO1;
 
-% Loading Reaction Wheel Run with T = 20
-[Time_RWHEEL2,Data_RWHEEL2] = LoadData('Lab 3 Data/RWHEEL_T20.csv');
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Gyro2 Run with Auto Frequency = 0.2, Current = 1
+[Time_GYRO2,Data_GYRO2] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F0pt2_C1.csv');
+p = polyfit(Data_GYRO2(:,1),Data_GYRO2(:,2),1);
+val_b_GYRO2 = p(2);% This is the bias in the Gyro
+val_k_GYRO2 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO2(:,1));
+
+% Finding min/max values for plots and slope
+min_GYRO2 = min(Data_GYRO2(:,1));
+max_GYRO2 = max(Data_GYRO2(:,1));
+minPolyline_GYRO2 = min(Polyline);
+maxPolyline_GYRO2 = max(Polyline);
+
+Calibrated_Data_GYRO2 = (Data_GYRO2(:,2) - val_b_GYRO2)/val_k_GYRO2;
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Gyro3 Run with Auto Frequency = 1, Current = 0.5
+[Time_GYRO3,Data_GYRO3] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F1_C0pt5.csv');
+p = polyfit(Data_GYRO3(:,1),Data_GYRO3(:,2),1);
+val_b_GYRO3 = p(2);% This is the bias in the Gyro
+val_k_GYRO3 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO3(:,1));
+
+% Finding min/max values for plots and slope
+min_GYRO3 = min(Data_GYRO3(:,1));
+max_GYRO3 = max(Data_GYRO3(:,1));
+minPolyline_GYRO3 = min(Polyline);
+maxPolyline_GYRO3 = max(Polyline);
+
+Calibrated_Data_GYRO3 = (Data_GYRO3(:,2) - val_b_GYRO3)/val_k_GYRO3;
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Gyro4 Run with Manual Frequency = 0.2, Current = 0.5
+[Time_GYRO4,Data_GYRO4] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F0pt2_C0pt5.csv');
+p = polyfit(Data_GYRO4(:,1),Data_GYRO4(:,2),1);
+val_b_GYRO4 = p(2);% This is the bias in the Gyro
+val_k_GYRO4 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO4(:,1));
+
+% Finding min/max values for plots and slope
+min_GYRO4 = min(Data_GYRO4(:,1));
+max_GYRO4 = max(Data_GYRO4(:,1));
+minPolyline_GYRO4 = min(Polyline);
+maxPolyline_GYRO4 = max(Polyline);
+
+Calibrated_Data_GYRO4 = (Data_GYRO4(:,2) - val_b_GYRO4)/val_k_GYRO4;
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Gyro5 Run with Manual Frequency = 0.2, Current = 1
+[Time_GYRO5,Data_GYRO5] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F0pt2_C1.csv');
+p = polyfit(Data_GYRO5(:,1),Data_GYRO5(:,2),1);
+val_b_GYRO5 = p(2);% This is the bias in the Gyro
+val_k_GYRO5 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO5(:,1));
+
+% Finding min/max values for plots and slope
+min_GYRO5 = min(Data_GYRO5(:,1));
+max_GYRO5 = max(Data_GYRO5(:,1));
+minPolyline_GYRO5 = min(Polyline);
+maxPolyline_GYRO5 = max(Polyline);
+
+Calibrated_Data_GYRO5 = (Data_GYRO5(:,2) - val_b_GYRO5)/val_k_GYRO5;
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Gyro6 Run with Manual Frequency = 1, Current = 0.5
+[Time_GYRO6,Data_GYRO6] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F1_C0pt5.csv');
+p = polyfit(Data_GYRO6(:,1),Data_GYRO6(:,2),1);
+val_b_GYRO6 = p(2);% This is the bias in the Gyro
+val_k_GYRO6 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_GYRO5(:,1));
+
+% Finding min/max values for plots and slope
+min_GYRO6 = min(Data_GYRO6(:,1));
+max_GYRO6 = max(Data_GYRO6(:,1));
+minPolyline_GYRO6 = min(Polyline);
+maxPolyline_GYRO6 = max(Polyline);
+
+Calibrated_Data_GYRO6 = (Data_GYRO6(:,2) - val_b_GYRO6)/val_k_GYRO6;
+
+%% REACTION WHEEL RUNS
+
+% Loading Reaction Wheel Test Run with Torque = 0.2
+[Time_RWHEEL1,Data_RWHEEL1] = LoadData_RWHEEL('Lab 3 Data/RWHEEL_T0pt2_Test.csv');
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Reaction Wheel Run with Torque = 20
+[Time_RWHEEL2,Data_RWHEEL2] = LoadData_RWHEEL('Lab 3 Data/RWHEEL_T20.csv');
+
+%% Plotting Section
+
+%{
+figure()
+hold on
+scatter(Data_BASE(:,1),Data_BASE(:,2),'.');
+grid on
+plot([min_BASE,max_BASE],[maxPolyline_BASE,minPolyline_BASE],'--')
+yline(val_b_BASE,'--');
+hold off
+
+figure()
+hold on
+plot(Time_BASE,Data_BASE(:,1))
+plot(Time_BASE,Calibrated_Data_BASE)
+hold off
+%}
+
+if Gyro1Switch == 1
+	figure(name='Gyro 1 Calibration')
+	hold on
+	scatter(Data_GYRO1(:,1),Data_GYRO1(:,2),'.');
+	grid on
+	plot([min_GYRO1,max_GYRO1],[maxPolyline_GYRO1,minPolyline_GYRO1],'--')
+	yline(val_b_GYRO1,'--');
+	hold off
+
+	figure(name='Gyro 1 Time Plot')
+	hold on
+	plot(Time_GYRO1,Data_GYRO1(:,1))
+	plot(Time_GYRO1,Calibrated_Data_GYRO1)
+	%plot(Time_GYRO1,Data_GYRO1)
+	hold off
+end
+
+if Gyro2Switch == 1
+	figure(name='Gyro 2 Calibration')
+	hold on
+	scatter(Data_GYRO2(:,1),Data_GYRO2(:,2),'.');
+	grid on
+	plot([min_GYRO2,max_GYRO2],[maxPolyline_GYRO2,minPolyline_GYRO2],'--')
+	yline(val_b_GYRO2,'--');
+	hold off
+	
+	figure(name='Gyro 2 Time Plot')
+	hold on
+	plot(Time_GYRO2,Data_GYRO2(:,1))
+	plot(Time_GYRO2,Calibrated_Data_GYRO2)
+	%plot(Time_GYRO2,Data_GYRO2)
+	hold off
+end
+	
+if Gyro3Switch == 1
+	figure(name='Gyro 3 Calibration')
+	hold on
+	scatter(Data_GYRO3(:,1),Data_GYRO3(:,2),'.');
+	grid on
+	plot([min_GYRO3,max_GYRO3],[maxPolyline_GYRO3,minPolyline_GYRO3],'--')
+	yline(val_b_GYRO3,'--');
+	hold off
+	
+	figure(name='Gyro 3 Time Plot')
+	hold on
+	plot(Time_GYRO3,Data_GYRO3(:,1))
+	plot(Time_GYRO3,Calibrated_Data_GYRO3)
+	%plot(Time_GYRO3,Data_GYRO3)
+	hold off
+end
+	
+if Gyro4Switch == 1
+	figure(name='Gyro 4 Calibration')
+	hold on
+	scatter(Data_GYRO4(:,1),Data_GYRO4(:,2),'.');
+	grid on
+	plot([min_GYRO4,max_GYRO4],[maxPolyline_GYRO4,minPolyline_GYRO4],'--')
+	yline(val_b_GYRO4,'--');
+	hold off
+	
+	figure(name='Gyro 4 Time Plot')
+	hold on
+	plot(Time_GYRO4,Data_GYRO4(:,1))
+	plot(Time_GYRO4,Calibrated_Data_GYRO4)
+	%plot(Time_GYRO4,Data_GYRO4)
+	hold off
+end
+	
+if Gyro5Switch == 1
+	figure(name='Gyro 5 Calibration')
+	hold on
+	scatter(Data_GYRO5(:,1),Data_GYRO5(:,2),'.');
+	grid on
+	plot([min_GYRO5,max_GYRO5],[maxPolyline_GYRO5,minPolyline_GYRO5],'--')
+	yline(val_b_GYRO5,'--');
+	hold off
+	
+	figure(name='Gyro 5 Time Plot')
+	hold on
+	plot(Time_GYRO5,Data_GYRO5(:,1))
+	plot(Time_GYRO5,Calibrated_Data_GYRO5)
+	%plot(Time_GYRO5,Data_GYRO5)
+	hold off
+end
+	
+if Gyro6Switch == 1
+	figure(name='Gyro 6 Calibration')
+	hold on
+	scatter(Data_GYRO6(:,1),Data_GYRO6(:,2),'.');
+	grid on
+	plot([min_GYRO6,max_GYRO6],[maxPolyline_GYRO6,minPolyline_GYRO6],'--')
+	yline(val_b_GYRO6,'--');
+	hold off
+	
+	figure(name='Gyro 6 Time Plot')
+	hold on
+	plot(Time_GYRO6,Data_GYRO6(:,1))
+	plot(Time_GYRO6,Calibrated_Data_GYRO6)
+	%plot(Time_GYRO6,Data_GYRO6)
+	hold off
+end
 
 %% Functions Section
 
@@ -60,23 +297,54 @@ function [Time,Data] = LoadData_BASE(fileName)
 % Read in Data
 data = readtable(fileName);
 data = table2array(data);
-data = unique(data, 'rows');
+data(:,1) = data(:,1)/1000; % Convert from milliseconds to seconds
+data(:,3) = data(:,3)/60 * 2 * pi; % Convert from RPM to rad/s
+data = unique(data, 'rows'); % Remove duplicate entries
 Time = data(:, 1); % Extracting the time column
-Time = Time/1000; % Converting from milliseconds to seconds
 Data = data(:, 2:end); % Extracting the data columns
 
 end
 
-function [Time,Data] = LoadData(fileName)
+function [Time,Data] = LoadData_CONTROL(fileName)
 % LoadData is a function that brings in the .csv files
 
 % Read in Data
 data = readtable(fileName);
 data = table2array(data);
-data = unique(data, 'rows');
+data(:,1) = data(:,1)/1000; % Convert from milliseconds to seconds
+data(1,:) = [];
+data = unique(data, 'rows'); % Remove duplicate entries
 Time = data(:, 1); % Extracting the time column
-Time = Time(2:end ,1) - Time(2);
-Time = Time/1000; % Converting from milliseconds to seconds
+Data = data(:, 2:end); % Extracting the data columns
+
+end
+
+function [Time,Data] = LoadData_GYRO(fileName)
+% LoadData is a function that brings in the .csv files
+
+% Read in Data
+data = readtable(fileName);
+data = table2array(data);
+data(:,3) = data(:,3)/60 * 2 * pi; % Convert from RPM to rad/s
+data(1,:) = [];
+data = unique(data, 'rows'); % Remove duplicate entries
+Time = data(:, 1); % Extracting the time column
+Time(:,1) = Time(:,1) - Time(1);
+Data = data(:, 2:end); % Extracting the data columns
+
+end
+
+function [Time,Data] = LoadData_RWHEEL(fileName)
+% LoadData is a function that brings in the .csv files
+
+% Read in Data
+data = readtable(fileName);
+data = table2array(data);
+data(:,1) = data(:,1)/1000; % Convert from milliseconds to seconds
+data(1,:) = [];
+data = unique(data, 'rows'); % Remove duplicate entries
+Time = data(:, 1); % Extracting the time column
+Time(:,1) = Time(:,1) - Time(1);
 Data = data(:, 2:end); % Extracting the data columns
 
 end
