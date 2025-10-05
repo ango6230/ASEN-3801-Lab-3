@@ -12,12 +12,12 @@ Control3Switch= 0;
 Control4Switch= 0;
 Control5Switch= 0;
 Control6Switch= 0;
-Gyro1Switch =	0;
-Gyro2Switch =	0;
-Gyro3Switch =	0;
-Gyro4Switch =	0;
-Gyro5Switch =	1;
-Gyro6Switch =	0;
+Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
+Gyro2Switch =	1; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
+Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
+Gyro4Switch =	1; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
+Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
+Gyro6Switch =	0; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A]
 Rwheel1Switch = 0;
 Rwheel2Switch = 0;
 
@@ -65,7 +65,7 @@ Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
 
 %% GYRO RUNS
 
-% Loading Gyro1 Run with Auto Frequency = 0.2, Current = 0.5
+% Loading Gyro1 Run with Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 [Time_GYRO1,Data_GYRO1] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F0pt2_C0pt5.csv');
 p = polyfit(Data_GYRO1(:,1),Data_GYRO1(:,2),1);
 val_b_GYRO1 = p(2);% This is the bias in the Gyro
@@ -81,7 +81,7 @@ maxPolyline_GYRO1 = max(Polyline);
 Calibrated_Data_GYRO1 = (Data_GYRO1(:,2) - val_b_GYRO1)/val_k_GYRO1;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Loading Gyro2 Run with Auto Frequency = 0.2, Current = 1
+% Loading Gyro2 Run with Auto Frequency = 0.2 [Hz], Current = 1 [A]
 [Time_GYRO2,Data_GYRO2] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F0pt2_C1.csv');
 p = polyfit(Data_GYRO2(:,1),Data_GYRO2(:,2),1);
 val_b_GYRO2 = p(2);% This is the bias in the Gyro
@@ -97,7 +97,7 @@ maxPolyline_GYRO2 = max(Polyline);
 Calibrated_Data_GYRO2 = (Data_GYRO2(:,2) - val_b_GYRO2)/val_k_GYRO2;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Loading Gyro3 Run with Auto Frequency = 1, Current = 0.5
+% Loading Gyro3 Run with Auto Frequency = 1 [Hz], Current = 0.5 [A]
 [Time_GYRO3,Data_GYRO3] = LoadData_GYRO('Lab 3 Data/GYRO_AUTO_F1_C0pt5.csv');
 p = polyfit(Data_GYRO3(:,1),Data_GYRO3(:,2),1);
 val_b_GYRO3 = p(2);% This is the bias in the Gyro
@@ -113,7 +113,7 @@ maxPolyline_GYRO3 = max(Polyline);
 Calibrated_Data_GYRO3 = (Data_GYRO3(:,2) - val_b_GYRO3)/val_k_GYRO3;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Loading Gyro4 Run with Manual Frequency = 0.2, Current = 0.5
+% Loading Gyro4 Run with Manual Frequency = 0.2 [Hz], Current = 0.5 [A]
 [Time_GYRO4,Data_GYRO4] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F0pt2_C0pt5.csv');
 p = polyfit(Data_GYRO4(:,1),Data_GYRO4(:,2),1);
 val_b_GYRO4 = p(2);% This is the bias in the Gyro
@@ -129,7 +129,7 @@ maxPolyline_GYRO4 = max(Polyline);
 Calibrated_Data_GYRO4 = (Data_GYRO4(:,2) - val_b_GYRO4)/val_k_GYRO4;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Loading Gyro5 Run with Manual Frequency = 0.2, Current = 1
+% Loading Gyro5 Run with Manual Frequency = 0.2 [Hz], Current = 1 [A]
 [Time_GYRO5,Data_GYRO5] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F0pt2_C1.csv');
 p = polyfit(Data_GYRO5(:,1),Data_GYRO5(:,2),1);
 val_b_GYRO5 = p(2);% This is the bias in the Gyro
@@ -145,7 +145,7 @@ maxPolyline_GYRO5 = max(Polyline);
 Calibrated_Data_GYRO5 = (Data_GYRO5(:,2) - val_b_GYRO5)/val_k_GYRO5;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Loading Gyro6 Run with Manual Frequency = 1, Current = 0.5
+% Loading Gyro6 Run with Manual Frequency = 1 [Hz], Current = 0.5 [A]
 [Time_GYRO6,Data_GYRO6] = LoadData_GYRO('Lab 3 Data/GYRO_MAN_F1_C0pt5.csv');
 p = polyfit(Data_GYRO6(:,1),Data_GYRO6(:,2),1);
 val_b_GYRO6 = p(2);% This is the bias in the Gyro
@@ -189,10 +189,11 @@ hold off
 
 if Gyro1Switch == 1
 	figure(name='Gyro 1 Calibration')
+	axis square
 	hold on
-	scatter(Data_GYRO1(:,1),Data_GYRO1(:,2),'.');
 	grid on
-	plot([min_GYRO1,max_GYRO1],[maxPolyline_GYRO1,minPolyline_GYRO1],'--')
+	scatter(Data_GYRO1(:,2),Data_GYRO1(:,1),'.');
+	plot([maxPolyline_GYRO1,minPolyline_GYRO1],[min_GYRO1,max_GYRO1],'--')
 	yline(val_b_GYRO1,'--');
 	hold off
 
@@ -206,11 +207,16 @@ end
 
 if Gyro2Switch == 1
 	figure(name='Gyro 2 Calibration')
+	%axis square
 	hold on
-	scatter(Data_GYRO2(:,1),Data_GYRO2(:,2),'.');
 	grid on
-	plot([min_GYRO2,max_GYRO2],[maxPolyline_GYRO2,minPolyline_GYRO2],'--')
+	scatter(Data_GYRO2(:,2),Data_GYRO2(:,1),'.');
+	plot([maxPolyline_GYRO2,minPolyline_GYRO2],[min_GYRO2,max_GYRO2],'--')
 	yline(val_b_GYRO2,'--');
+	title('Gyro Calibration Run',FontSize=18)
+	xlabel('Encoder Rate Measurement [rad/s]',FontSize=14)
+	ylabel('Gyro Output [rad/s]',FontSize=14)
+	legend('Data','Adjusted Scale Factor \itK','Bias \itb')
 	hold off
 	
 	figure(name='Gyro 2 Time Plot')
@@ -223,10 +229,11 @@ end
 	
 if Gyro3Switch == 1
 	figure(name='Gyro 3 Calibration')
+	axis square
 	hold on
-	scatter(Data_GYRO3(:,1),Data_GYRO3(:,2),'.');
 	grid on
-	plot([min_GYRO3,max_GYRO3],[maxPolyline_GYRO3,minPolyline_GYRO3],'--')
+	scatter(Data_GYRO3(:,2),Data_GYRO3(:,1),'.');
+	plot([maxPolyline_GYRO3,minPolyline_GYRO3],[min_GYRO3,max_GYRO3],'--')
 	yline(val_b_GYRO3,'--');
 	hold off
 	
@@ -240,10 +247,11 @@ end
 	
 if Gyro4Switch == 1
 	figure(name='Gyro 4 Calibration')
+	axis square
 	hold on
-	scatter(Data_GYRO4(:,1),Data_GYRO4(:,2),'.');
 	grid on
-	plot([min_GYRO4,max_GYRO4],[maxPolyline_GYRO4,minPolyline_GYRO4],'--')
+	scatter(Data_GYRO4(:,2),Data_GYRO4(:,1),'.');
+	plot([maxPolyline_GYRO4,minPolyline_GYRO4],[min_GYRO4,max_GYRO4],'--')
 	yline(val_b_GYRO4,'--');
 	hold off
 	
@@ -257,10 +265,11 @@ end
 	
 if Gyro5Switch == 1
 	figure(name='Gyro 5 Calibration')
+	axis square
 	hold on
-	scatter(Data_GYRO5(:,1),Data_GYRO5(:,2),'.');
 	grid on
-	plot([min_GYRO5,max_GYRO5],[maxPolyline_GYRO5,minPolyline_GYRO5],'--')
+	scatter(Data_GYRO5(:,2),Data_GYRO5(:,1),'.');
+	plot([maxPolyline_GYRO5,minPolyline_GYRO5],[min_GYRO5,max_GYRO5],'--')
 	yline(val_b_GYRO5,'--');
 	hold off
 	
@@ -274,10 +283,11 @@ end
 	
 if Gyro6Switch == 1
 	figure(name='Gyro 6 Calibration')
+	axis square
 	hold on
-	scatter(Data_GYRO6(:,1),Data_GYRO6(:,2),'.');
 	grid on
-	plot([min_GYRO6,max_GYRO6],[maxPolyline_GYRO6,minPolyline_GYRO6],'--')
+	scatter(Data_GYRO6(:,2),Data_GYRO6(:,1),'.');
+	plot([maxPolyline_GYRO6,minPolyline_GYRO6],[min_GYRO6,max_GYRO6],'--')
 	yline(val_b_GYRO6,'--');
 	hold off
 	
@@ -326,6 +336,10 @@ function [Time,Data] = LoadData_GYRO(fileName)
 data = readtable(fileName);
 data = table2array(data);
 data(:,3) = data(:,3)/60 * 2 * pi; % Convert from RPM to rad/s
+truncate = find(data(:,2) >= 8.7,1);
+data(1:truncate,:) = [];
+mask = data(:,2) >= 8.7;
+data(mask,:) = [];
 data(1,:) = [];
 data = unique(data, 'rows'); % Remove duplicate entries
 Time = data(:, 1); % Extracting the time column
