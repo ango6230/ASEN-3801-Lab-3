@@ -15,7 +15,7 @@ Control6Switch= 0;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	1; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
-Gyro4Switch =	1; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
+Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
 Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
 Gyro6Switch =	0; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A]
 Rwheel1Switch = 0;
@@ -206,25 +206,59 @@ if Gyro1Switch == 1
 end
 
 if Gyro2Switch == 1
+	% Figure plot for Problem 3.1 part c-1
+	figure(name='Raw Unflipped Gyro 2 Time Plot')
+	hold on
+	grid on
+	plot(Time_GYRO2,Data_GYRO2(:,1),'--',LineWidth=2)
+	plot(Time_GYRO2,Data_GYRO2(:,2),'r',LineWidth=0.8)
+	title('Raw Gyro Data Overlaid with Encoder Data Before Calibration',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Raw Gyro Data')
+	hold off
+	print('Problem_3_1c1-1','-dpng','-r600')
+
+	% Figure plot for Problem 3.1 part c-1
+	figure(name='Raw Flipped Gyro 2 Time Plot')
+	hold on
+	grid on
+	plot(Time_GYRO2,Data_GYRO2(:,1),'--',LineWidth=2)
+	plot(Time_GYRO2,-1 .* Data_GYRO2(:,2),'r',LineWidth=0.8)
+	title('Raw Gyro Data Overlaid with Encoder Data Before Calibration',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Raw Gyro Data')
+	hold off
+	print('Problem_3_1c1-2','-dpng','-r600')
+
+	% Figure plot for Problem 3.1 part c-2
 	figure(name='Gyro 2 Calibration')
-	%axis square
+	axis square
 	hold on
 	grid on
 	scatter(Data_GYRO2(:,2),Data_GYRO2(:,1),'.');
-	plot([maxPolyline_GYRO2,minPolyline_GYRO2],[min_GYRO2,max_GYRO2],'--')
+	plot([maxPolyline_GYRO2,minPolyline_GYRO2],[min_GYRO2,max_GYRO2],'--r',LineWidth=2)
 	yline(val_b_GYRO2,'--');
-	title('Gyro Calibration Run',FontSize=18)
+	title('Gyro Calibration Data',FontSize=18)
 	xlabel('Encoder Rate Measurement [rad/s]',FontSize=14)
 	ylabel('Gyro Output [rad/s]',FontSize=14)
 	legend('Data','Adjusted Scale Factor \itK','Bias \itb')
 	hold off
+	print('Problem_3_1c2-1','-dpng','-r600')
 	
-	figure(name='Gyro 2 Time Plot')
+	% Figure plot for Problem 3.1 part c-2
+	figure(name='Calibrated Gyro 2 Time Plot')
 	hold on
-	plot(Time_GYRO2,Data_GYRO2(:,1))
-	plot(Time_GYRO2,Calibrated_Data_GYRO2)
-	%plot(Time_GYRO2,Data_GYRO2)
+	grid on
+	plot(Time_GYRO2,Data_GYRO2(:,1),'--',LineWidth=2)
+	plot(Time_GYRO2,Calibrated_Data_GYRO2,'r',LineWidth=0.8)
+	title('Calibrated Gyro Data Overlaid with Encoder Data',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Calibrated Gyro Data')
 	hold off
+	print('Problem_3_1c2-2','-dpng','-r600')
 end
 	
 if Gyro3Switch == 1
