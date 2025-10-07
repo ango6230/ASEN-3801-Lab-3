@@ -5,7 +5,7 @@
 clear;clc;close all
 
 % Toggle Switch
-BaseSwitch =	0;
+BaseSwitch =	1;
 Control1Switch= 0;
 Control2Switch= 0;
 Control3Switch= 0;
@@ -13,7 +13,7 @@ Control4Switch= 0;
 Control5Switch= 0;
 Control6Switch= 0;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
-Gyro2Switch =	1; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
+Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
 Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
 Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
@@ -37,6 +37,11 @@ minPolyline_BASE = min(Polyline);
 maxPolyline_BASE = max(Polyline);
 
 Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
+
+% Calculating MOI of the Base
+torque_const = 25.5; %mNm/Amp
+MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^
+
 
 %% CONTROL RUNS
 
