@@ -15,9 +15,9 @@ Control6Switch= 0;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
-Gyro4Switch =	1; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
-Gyro5Switch =	1; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
-Gyro6Switch =	1; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A]
+Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A]
+Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
+Gyro6Switch =	1; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
 Rwheel1Switch = 0;
 Rwheel2Switch = 0;
 
@@ -274,7 +274,7 @@ if Gyro2Switch == 1
 	hold off
 	print('Problem_3_1c2-2','-dpng','-r600')
 end
-	
+
 if Gyro3Switch == 1
 	figure(name='Gyro 3 Calibration')
 	axis square
@@ -292,7 +292,7 @@ if Gyro3Switch == 1
 	%plot(Time_GYRO3,Data_GYRO3)
 	hold off
 end
-	
+
 if Gyro4Switch == 1
 	figure(name='Gyro 4 Calibration')
 	axis square
@@ -306,11 +306,11 @@ if Gyro4Switch == 1
 	figure(name='Gyro 4 Time Plot')
 	hold on
 	plot(Time_GYRO4,Data_GYRO4(:,1))
-	%plot(Time_GYRO4,Calibrated_Data_GYRO4)
-	plot(Time_GYRO4,-1 * Data_GYRO4(:,1))
+	plot(Time_GYRO4,Calibrated_Data_GYRO4)
+	%plot(Time_GYRO4,-1 * Data_GYRO4(:,1))
 	hold off
 end
-	
+
 if Gyro5Switch == 1
 	figure(name='Gyro 5 Calibration')
 	axis square
@@ -328,7 +328,7 @@ if Gyro5Switch == 1
 	%plot(Time_GYRO5,Data_GYRO5)
 	hold off
 end
-	
+
 if Gyro6Switch == 1
 	figure(name='Gyro 6 Calibration')
 	axis square
@@ -338,13 +338,49 @@ if Gyro6Switch == 1
 	plot([maxPolyline_GYRO6,minPolyline_GYRO6],[min_GYRO6,max_GYRO6],'--')
 	yline(val_b_GYRO6,'--');
 	hold off
-	
+
+	% Figure plot for Problem 3.1 part b-1
 	figure(name='Gyro 6 Time Plot')
 	hold on
-	plot(Time_GYRO6,Data_GYRO6(:,1))
-	plot(Time_GYRO6,Calibrated_Data_GYRO6)
+	grid on
+	plot(Time_GYRO6,Data_GYRO6(:,1),'--')
+	plot(Time_GYRO6,Calibrated_Data_GYRO6,'r')
 	%plot(Time_GYRO6,Data_GYRO6)
+	title('Calibrated MANUAL Gyro Data Overlaid with Encoder Data',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Calibrated Gyro Data',Location='southwest')
 	hold off
+	print('Problem_3_1b-1','-dpng','-r600')
+
+	% Figure plot for Problem 3.1 part b-2
+	figure(name='Gyro 6 Time Plot')
+	hold on
+	grid on
+	plot(Time_GYRO6,Data_GYRO6(:,1),'--')
+	plot(Time_GYRO6,Data_GYRO6(:,2),'r')
+	title('Raw MANUAL Gyro Data Overlaid with Encoder Data',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Raw Gyro Data',Location='southwest')
+	xlim([0,10]);
+	hold off
+	print('Problem_3_1b-2','-dpng','-r600')
+
+	% Figure plot for Problem 3.1 part b-3
+	figure(name='Gyro 6 Time Plot')
+	hold on
+	grid on
+	plot(Time_GYRO6,Data_GYRO6(:,1),'--')
+	plot(Time_GYRO6,Calibrated_Data_GYRO6,'r')
+	%plot(Time_GYRO6,Data_GYRO6)
+	title('Calibrated MANUAL Gyro Data Overlaid with Encoder Data',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Gyro Data [rad/s]',FontSize=14)
+	legend('Encoder Data','Calibrated Gyro Data',Location='southwest')
+	xlim([0,10]);
+	hold off
+	print('Problem_3_1b-3','-dpng','-r600')
 end
 
 %% Functions Section
