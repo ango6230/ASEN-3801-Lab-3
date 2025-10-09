@@ -5,7 +5,7 @@
 clear;clc;close all
 
 % Toggle Switch
-BaseSwitch =	0;
+BaseSwitch =	1;
 Control1Switch= 0;
 Control2Switch= 0;
 Control3Switch= 0;
@@ -37,6 +37,11 @@ minPolyline_BASE = min(Polyline);
 maxPolyline_BASE = max(Polyline);
 
 Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
+
+% Calculating MOI of the Base
+torque_const = 25.5; %mNm/Amp
+MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^
+
 
 %% CONTROL RUNS
 
