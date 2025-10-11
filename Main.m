@@ -12,6 +12,7 @@ Control3Switch= 1;
 Control4Switch= 1;
 Control5Switch= 1;
 Control6Switch= 1;
+ControlChosenSwitch = 1;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
@@ -67,6 +68,10 @@ MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^2
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control6 Run with k1(proportional) = 200, k2(derivative) = 0, k3(integral) = 0
 [Time_CONTROL6,Data_CONTROL6] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_200_K2_0_K3_0.csv');
+
+% Loading Control Chosen values of k1 = 3.48 k2 = 16.7
+[Time_CONTROL_Chosen, Data_CONTROL_Chosen] = LoadData_CONTROL('Lab 3 Data/10-7-25_CONTROL_kp_3pt48_kd_16pt7.csv');
+
 
 %% GYRO RUNS
 
@@ -196,8 +201,9 @@ if Control1Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL1, Data_CONTROL1(:,2))
-    pos_1 = abs(Data_CONTROL1(:,2));
+    plot(Time_CONTROL1-Time_CONTROL1(1), unwrap(Data_CONTROL1(:,2)-Data_CONTROL1(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Control2Switch == 1
@@ -205,7 +211,9 @@ if Control2Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL2, Data_CONTROL2(:,2))
+    plot(Time_CONTROL2-Time_CONTROL2(1), unwrap(Data_CONTROL2(:,2)-Data_CONTROL2(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Control3Switch == 1
@@ -213,7 +221,9 @@ if Control3Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL3, Data_CONTROL3(:,2))
+    plot(Time_CONTROL3-Time_CONTROL3(1), unwrap(Data_CONTROL3(:,2)-Data_CONTROL3(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Control4Switch == 1
@@ -221,7 +231,9 @@ if Control4Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL4, Data_CONTROL4(:,2))
+    plot(Time_CONTROL4-Time_CONTROL4(1), unwrap(Data_CONTROL4(:,2)-Data_CONTROL4(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Control5Switch == 1
@@ -229,14 +241,27 @@ if Control5Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL5, Data_CONTROL5(:,2))
+    plot(Time_CONTROL5-Time_CONTROL5(1), unwrap(Data_CONTROL5(:,2)-Data_CONTROL5(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Control6Switch == 1
     figure(name='Control Kp=200 Kd=0')
     hold on
     grid on
-    plot(Time_CONTROL6, Data_CONTROL6(:,2))
+    plot(Time_CONTROL6-Time_CONTROL6(1), unwrap(Data_CONTROL6(:,2)-Data_CONTROL6(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
+    hold off
+end
+if ControlChosenSwitch == 1
+    figure(name='Control Kp=200 Kd=0')
+    hold on
+    grid on
+    plot(Time_CONTROL_Chosen-Time_CONTROL_Chosen(1), unwrap(Data_CONTROL_Chosen(:,2)-Data_CONTROL_Chosen(1,2)))
+    xlabel('Time [s]')
+    ylabel('Position [rad]')
     hold off
 end
 if Gyro1Switch == 1
