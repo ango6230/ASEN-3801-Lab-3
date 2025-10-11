@@ -163,6 +163,57 @@ max_GYRO6 = max(Data_GYRO6(:,1));
 minPolyline_GYRO6 = min(Polyline);
 maxPolyline_GYRO6 = max(Polyline);
 
+%%
+angular_rate_error_1 = (abs(Data_GYRO1(:,2)) - abs(Calibrated_Data_GYRO1));
+angular_rate_error_3 = (abs(Data_GYRO3(:,2)) - abs(Calibrated_Data_GYRO3));
+
+figure();
+plot(Time_GYRO1,angular_rate_error_1);
+hold on;
+xlabel('Time(s)');
+ylabel('Angular Rate Measurement Error');
+title('Time History Of Angular Rate Measurement Error for Data Set 1');
+
+figure();
+plot(Time_GYRO3,angular_rate_error_3);
+hold on;
+xlabel('Time(s)');
+ylabel('Angular Rate Measurement Error');
+title('Time History Of Angular Rate Measurement Error for Data Set 3');
+
+%true angular position
+theta0_1 = 0;
+theta_1= theta0_1 + cumtrapz(Time_GYRO1, Data_GYRO1(:,2));
+theta0_3 = 0;
+theta_3= theta0_3 + cumtrapz(Time_GYRO3, Data_GYRO3(:,2));
+
+%measured angular position
+phi0_1 = 0;
+phi_1 = phi0_1 + cumtrapz(Time_GYRO1, Calibrated_Data_GYRO1(:,1));
+phi0_3 = 0;
+phi_3 = phi0_3 + cumtrapz(Time_GYRO3, Calibrated_Data_GYRO3(:,1));
+
+
+figure();
+plot(Time_GYRO1, theta_1);
+hold on;
+plot(Time_GYRO1, -phi_1);
+ylabel('Rate Measurement'); %what units 
+xlabel('Time(s)');
+title('Time History of True Angular Position(Encoder) and Measured Angular Position(Gyro) For Data Set 1')
+legend('True Angular Position','Measured Angular Position');
+
+figure();
+plot(Time_GYRO3, theta_3);
+hold on;
+plot(Time_GYRO3, -phi_3);
+ylabel('Rate Measurement'); %what units 
+xlabel('Time(s)');
+title('Time History of True Angular Position(Encoder) and Measured Angular Position(Gyro) For Data Set 3')
+legend('True Angular Position','Measured Angular Position');
+
+
+
 Calibrated_Data_GYRO6 = (Data_GYRO6(:,2) - val_b_GYRO6)/val_k_GYRO6;
 
 %% REACTION WHEEL RUNS
