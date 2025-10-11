@@ -6,12 +6,12 @@ clear;clc;close all
 
 % Toggle Switch
 BaseSwitch =	0;
-Control1Switch= 0;
-Control2Switch= 0;
-Control3Switch= 0;
-Control4Switch= 0;
-Control5Switch= 0;
-Control6Switch= 0;
+Control1Switch= 1;
+Control2Switch= 1;
+Control3Switch= 1;
+Control4Switch= 1;
+Control5Switch= 1;
+Control6Switch= 1;
 ControlChosenSwitch = 1;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
@@ -41,36 +41,49 @@ Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
 
 % Calculating MOI of the Base
 torque_const = 25.5; %mNm/Amp
-MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^
-
+MOI_BASE = (torque_const * mean(Data_BASE(:,3)))/p(1); %mkgm^
 
 %% CONTROL RUNS
 
 % Loading Control1 Run with k1(proportional) = 50, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL1,Data_CONTROL1] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
+Time_CONTROL1 = Time_CONTROL1 - Time_CONTROL1(1);
+Data_CONTROL1(:,2) = unwrap(Data_CONTROL1(:,2) - Data_CONTROL1(1,2));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control2 Run with k1(proportional) = 100, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL2,Data_CONTROL2] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_15_K3_0.csv');
+Time_CONTROL2 = Time_CONTROL2 - Time_CONTROL2(1);
+Data_CONTROL2(:,2) = unwrap(Data_CONTROL2(:,2) - Data_CONTROL2(1,2));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control3 Run with k1(proportional) = 100, k2(derivative) = 40, k3(integral) = 0
 [Time_CONTROL3,Data_CONTROL3] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_40_K3_0.csv');
+Time_CONTROL3 = Time_CONTROL3 - Time_CONTROL3(1);
+Data_CONTROL3(:,2) = unwrap(Data_CONTROL3(:,2) - Data_CONTROL3(1,2));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control4 Run with k1(proportional) = 100, k2(derivative) = -10, k3(integral) = 0
 [Time_CONTROL4,Data_CONTROL4] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_neg10_K3_0.csv');
+Time_CONTROL4 = Time_CONTROL4 - Time_CONTROL4(1);
+Data_CONTROL4(:,2) = unwrap(Data_CONTROL4(:,2) - Data_CONTROL4(1,2));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control5 Run with k1(proportional) = 150, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL5,Data_CONTROL5] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_150_K2_15_K3_0.csv');
+Time_CONTROL5 = Time_CONTROL5 - Time_CONTROL5(1);
+Data_CONTROL5(:,2) = unwrap(Data_CONTROL5(:,2) - Data_CONTROL5(1,2));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control6 Run with k1(proportional) = 200, k2(derivative) = 0, k3(integral) = 0
 [Time_CONTROL6,Data_CONTROL6] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_200_K2_0_K3_0.csv');
+Time_CONTROL6 = Time_CONTROL6 - Time_CONTROL6(1);
+Data_CONTROL6(:,2) = unwrap(Data_CONTROL6(:,2) - Data_CONTROL6(1,2));
 
 % Loading Control Chosen values of k1 = 3.48 k2 = 16.7
-[Time_CONTROL_Chosen, Data_CONTROL_Chosen] = LoadData_CONTROL('Lab 3 Data/10-7-25_CONTROL_kp_3pt48_kd_16pt7.csv');
+[Time_CONTROL_Chosen, Data_CONTROL_Chosen] = LoadData_CONTROL('Lab 3 Data/10-7-25_CONTROL_kp_3pt48_kd_16pt6.csv');
+Time_CONTROL_Chosen = Time_CONTROL_Chosen - Time_CONTROL_Chosen(1);
+Data_CONTROL_Chosen(:,2) = unwrap(Data_CONTROL_Chosen(:,2) - Data_CONTROL_Chosen(1,2));
 
 %% GYRO RUNS
 
@@ -231,77 +244,86 @@ end
 %% CONTROL Plotting Section
 
 if Control1Switch == 1
-    figure(name='Control Kp=50 Kd=15')
-    axis square
-    hold on
-    grid on
-    plot(Time_CONTROL1-Time_CONTROL1(1), unwrap(Data_CONTROL1(:,2)-Data_CONTROL1(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control1 Kp=50 Kd=15')
+	axis square
+	hold on
+	grid on
+	plot(Time_CONTROL1,Data_CONTROL1(:,2),LineWidth=1.8)
+	plot(Time_CONTROL1,Data_CONTROL1(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 if Control2Switch == 1
-    figure(name='Control Kp=100 Kd=15')
-    axis square
-    hold on
-    grid on
-    plot(Time_CONTROL2-Time_CONTROL2(1), unwrap(Data_CONTROL2(:,2)-Data_CONTROL2(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control2 Kp=100 Kd=15')
+	axis square
+	hold on
+	grid on
+	plot(Time_CONTROL2,Data_CONTROL2(:,2),LineWidth=1.8)
+	plot(Time_CONTROL2,Data_CONTROL2(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 if Control3Switch == 1
-    figure(name='Control Kp=100 Kd=40')
-    axis square
-    hold on
-    grid on
-    plot(Time_CONTROL3-Time_CONTROL3(1), unwrap(Data_CONTROL3(:,2)-Data_CONTROL3(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control3 Kp=100 Kd=40')
+	axis square
+	hold on
+	grid on
+	plot(Time_CONTROL3,Data_CONTROL3(:,2),LineWidth=1.8)
+	plot(Time_CONTROL3,Data_CONTROL3(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 if Control4Switch == 1
-    figure(name='Control Kp=100 Kd=-10')
-    axis square
-    hold on
-    grid on
-    plot(Time_CONTROL4-Time_CONTROL4(1), unwrap(Data_CONTROL4(:,2)-Data_CONTROL4(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control4 Kp=100 Kd=-10')
+	axis square
+	hold on
+	grid on
+	plot(Time_CONTROL4,Data_CONTROL4(:,2),LineWidth=1.8)
+	plot(Time_CONTROL4,Data_CONTROL4(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
+
 if Control5Switch == 1
-    figure(name='Control Kp=150 Kd=15')
-    axis square
-    hold on
-    grid on
-    plot(Time_CONTROL5-Time_CONTROL5(1), unwrap(Data_CONTROL5(:,2)-Data_CONTROL5(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control5 Kp=150 Kd=15')
+	axis square
+	hold on
+	grid on
+	plot(Time_CONTROL5,Data_CONTROL5(:,2),LineWidth=1.8)
+	plot(Time_CONTROL5,Data_CONTROL5(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 if Control6Switch == 1
-    figure(name='Control Kp=200 Kd=0')
-    hold on
-    grid on
-    plot(Time_CONTROL6-Time_CONTROL6(1), unwrap(Data_CONTROL6(:,2)-Data_CONTROL6(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control6 Kp=200 Kd=0')
+	hold on
+	grid on
+	plot(Time_CONTROL6,Data_CONTROL6(:,2),LineWidth=1.8)
+	plot(Time_CONTROL6,Data_CONTROL6(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 if ControlChosenSwitch == 1
-    figure(name='Control Kp=200 Kd=0')
-    hold on
-    grid on
-    plot(Time_CONTROL_Chosen-Time_CONTROL_Chosen(1), unwrap(Data_CONTROL_Chosen(:,2)-Data_CONTROL_Chosen(1,2)))
-    xlabel('Time [s]')
-    ylabel('Position [rad]')
-    hold off
+	figure(name='Control Chosen Kp=3.48 Kd=16.6')
+	hold on
+	grid on
+	%plot(Time_CONTROL_Chosen, unwrap(Data_CONTROL_Chosen(:,2)))
+	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,2),LineWidth=1.8)
+	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,1),LineWidth=1)
+	xlabel('Time [s]')
+	ylabel('Position [rad]')
+	hold off
 end
 
 %% GYRO Plotting Section
@@ -551,7 +573,7 @@ data = readtable(fileName);
 data = table2array(data);
 data(:,1) = data(:,1)/1000; % Convert from milliseconds to seconds
 data(1,:) = [];
-data = unique(data, 'rows'); % Remove duplicate entries
+%data = unique(data, 'rows'); % Remove duplicate entries
 Time = data(:, 1); % Extracting the time column
 Data = data(:, 2:end); % Extracting the data columns
 
