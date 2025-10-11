@@ -47,6 +47,10 @@ MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^
 
 % Loading Control1 Run with k1(proportional) = 50, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL1,Data_CONTROL1] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
+p = polyfit(Data_CONTROL1(:,1),Data_CONTROL1(:,2),1);
+val_b_CONTROL1 = p(2);% This is the bias in the Gyro
+val_k_CONTROL1 = p(1);% This is the scale factor for calibration
+Calibrated_Data_CONTROL1 = (Data_CONTROL1(:,2) - val_b_CONTROL1)/val_k_CONTROL1;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control2 Run with k1(proportional) = 100, k2(derivative) = 15, k3(integral) = 0

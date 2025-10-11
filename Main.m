@@ -7,13 +7,13 @@ clear;clc;close all
 % Toggle Switch
 BaseSwitch =	0;
 Control1Switch= 1;
-Control2Switch= 1;
-Control3Switch= 1;
-Control4Switch= 1;
-Control5Switch= 1;
-Control6Switch= 1;
-ControlChosenSwitch = 1;
-Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
+Control2Switch= 0;
+Control3Switch= 0;
+Control4Switch= 0;
+Control5Switch= 0;
+Control6Switch= 0;
+ControlChosenSwitch = 0;
+Gyro1Switch =	1; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
 Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
@@ -48,6 +48,18 @@ MOI_BASE = (torque_const*mean(Data_BASE(:,3)))/p(1); %mkgm^2
 
 % Loading Control1 Run with k1(proportional) = 50, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL1,Data_CONTROL1] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
+p = polyfit(Data_CONTROL1(:,1),Data_CONTROL1(:,2),1);
+val_b_CONTROL1 = p(2);% This is the bias in the Control
+val_k_CONTROL1 = p(1);% This is the scale factor for calibration
+Polyline = polyval(p,Data_CONTROL1(:,1));
+
+% Finding min/max values for plots and slope
+min_CONTROL1 = min(Data_CONTROL1(:,1));
+max_CONTROL1 = max(Data_CONTROL1(:,1));
+minPolyline_CONTROL1 = min(Polyline);
+maxPolyline_CONTROL1 = max(Polyline);
+
+Calibrated_Data_CONTROL1 = (Data_CONTROL1(:,2) - val_b_CONTROL1)/val_k_CONTROL1;
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control2 Run with k1(proportional) = 100, k2(derivative) = 15, k3(integral) = 0
@@ -247,12 +259,14 @@ plot(Time_BASE,Data_BASE(:,1))
 plot(Time_BASE,Calibrated_Data_BASE)
 hold off
 %}
+
 if Control1Switch == 1
     figure(name='Control Kp=50 Kd=15')
     axis square
     hold on
     grid on
-    plot(Time_CONTROL1-Time_CONTROL1(1), unwrap(Data_CONTROL1(:,2)-Data_CONTROL1(1,2)))
+    plot(Time_CONTROL1-Time_CONTROL1(1),Calibrated_Data_CONTROL1)
+    plot(Time_CONTROL1-Time_CONTROL1(1), Data_CONTROL1(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
@@ -262,7 +276,8 @@ if Control2Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL2-Time_CONTROL2(1), unwrap(Data_CONTROL2(:,2)-Data_CONTROL2(1,2)))
+    plot(Time_CONTROL2-Time_CONTROL2(1), unwrap(Data_CONTROL2(:,2))-Data_CONTROL2(1,2))
+    plot(Time_CONTROL2-Time_CONTROL2(1), Data_CONTROL2(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
@@ -272,7 +287,8 @@ if Control3Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL3-Time_CONTROL3(1), unwrap(Data_CONTROL3(:,2)-Data_CONTROL3(1,2)))
+    plot(Time_CONTROL3-Time_CONTROL3(1), unwrap(Data_CONTROL3(:,2))-Data_CONTROL3(1,2))
+    plot(Time_CONTROL3-Time_CONTROL3(1), Data_CONTROL3(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
@@ -282,7 +298,8 @@ if Control4Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL4-Time_CONTROL4(1), unwrap(Data_CONTROL4(:,2)-Data_CONTROL4(1,2)))
+    plot(Time_CONTROL4-Time_CONTROL4(1), unwrap(Data_CONTROL4(:,2))-Data_CONTROL4(1,2))
+    plot(Time_CONTROL4-Time_CONTROL4(1), Data_CONTROL4(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
@@ -292,7 +309,8 @@ if Control5Switch == 1
     axis square
     hold on
     grid on
-    plot(Time_CONTROL5-Time_CONTROL5(1), unwrap(Data_CONTROL5(:,2)-Data_CONTROL5(1,2)))
+    plot(Time_CONTROL5-Time_CONTROL5(1), unwrap(Data_CONTROL5(:,2))-Data_CONTROL5(1,2))
+    plot(Time_CONTROL5-Time_CONTROL5(1), Data_CONTROL5(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
@@ -302,15 +320,17 @@ if Control6Switch == 1
     hold on
     grid on
     plot(Time_CONTROL6-Time_CONTROL6(1), unwrap(Data_CONTROL6(:,2)-Data_CONTROL6(1,2)))
+    plot(Time_CONTROL6-Time_CONTROL6(1), Data_CONTROL6(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
 end
 if ControlChosenSwitch == 1
-    figure(name='Control Kp=200 Kd=0')
+    figure(name='Control Kp=3.48 Kd=16.7')
     hold on
     grid on
-    plot(Time_CONTROL_Chosen-Time_CONTROL_Chosen(1), unwrap(Data_CONTROL_Chosen(:,2)-Data_CONTROL_Chosen(1,2)))
+    plot(Time_CONTROL_Chosen-Time_CONTROL_Chosen(1), unwrap(Data_CONTROL_Chosen(:,2))-Data_CONTROL_Chosen(1,2))
+    plot(Time_CONTROL_Chosen-Time_CONTROL_Chosen(1), Data_CONTROL_Chosen(:,1))
     xlabel('Time [s]')
     ylabel('Position [rad]')
     hold off
