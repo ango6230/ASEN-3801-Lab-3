@@ -24,12 +24,29 @@ Rwheel2Switch = 0;
 
 %% BASE RUN
 
+TorqueConst_BASE = 25.5; % [mNm/A]
+
 % Loading Base Run
 [Time_BASE,Data_BASE] = LoadData_BASE('Lab 3 Data/BASE_T10.csv');
-p = polyfit(Data_BASE(:,1),Data_BASE(:,2),1);
+% Converting Amps to Torque [Nm]
+Torque_BASE = (Data_BASE(:,3) * TorqueConst_BASE)/1000;
+%Torque_BASE = nonzeros(Torque_BASE);
+Torque_BASE = mean(Torque_BASE);
+% Converting angular velocity to angular acceleration [rad/s^2]
+alpha_BASE = gradient(Data_BASE(:,2), Time_BASE);
+%alpha_BASE = nonzeros(alpha_BASE);
+alpha_BASE = mean(alpha_BASE);
+% Calculating MOI of the Base [kg*m^2]
+MOI_BASE = Torque_BASE/alpha_BASE;
+
+%{
+%p = polyfit(Data_BASE(:,1),Data_BASE(:,2),1);
+p = polyfit(Time_BASE,Data_BASE(:,2),1);
 val_b_BASE = p(2);% This is the bias in the Gyro
 val_k_BASE = p(1);% This is the scale factor for calibration
-Polyline = polyval(p,Data_BASE(:,1));
+Polyline = polyval(p,Time_BASE);
+
+plot(Time_BASE,Polyline)
 
 % Finding min/max values for plots and slope
 min_BASE = min(Data_BASE(:,1));
@@ -37,55 +54,70 @@ max_BASE = max(Data_BASE(:,1));
 minPolyline_BASE = min(Polyline);
 maxPolyline_BASE = max(Polyline);
 
-Calibrated_Data_BASE = (Data_BASE(:,2) - val_b_BASE)/val_k_BASE;
-
-% Calculating MOI of the Base
-torque_const = 25.5; %mNm/Amp
-MOI_BASE = (torque_const * mean(Data_BASE(:,3)))/p(1); %mkgm^
+% Calculating MOI of the Base [kg*m^2]
+%MOI_BASE = (TorqueConst_BASE * mean(Data_BASE(:,3)))/mean(alpha_BASE);
+MOI_BASE = Torque_BASE/alpha_BASE;
+%}
 
 %% CONTROL RUNS
 
 % Loading Control1 Run with k1(proportional) = 50, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL1,Data_CONTROL1] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_50_K2_15_K3_0.csv');
 Time_CONTROL1 = Time_CONTROL1 - Time_CONTROL1(1);
-%Data_CONTROL1(:,2) = unwrap(Data_CONTROL1(:,2) - Data_CONTROL1(1,2));
+unwrapped_CONTROL1 = unwrap(Data_CONTROL1(:,2));
+%shift_CONTROL1 = unwrapped_CONTROL1 - unwrapped_CONTROL1(end) + Data_CONTROL1(end,1);
+shift_CONTROL1 = unwrapped_CONTROL1 - unwrapped_CONTROL1(end) + 0.25;
+wrapped_CONTROL1 = wrapToPi(shift_CONTROL1);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control2 Run with k1(proportional) = 100, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL2,Data_CONTROL2] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_15_K3_0.csv');
 Time_CONTROL2 = Time_CONTROL2 - Time_CONTROL2(1);
-%Data_CONTROL2(:,2) = unwrap(Data_CONTROL2(:,2) - Data_CONTROL2(1,2));
+unwrapped_CONTROL2 = unwrap(Data_CONTROL2(:,2));
+%shift_CONTROL2 = unwrapped_CONTROL2 - unwrapped_CONTROL2(end) + Data_CONTROL2(end,1);
+shift_CONTROL2 = unwrapped_CONTROL2 - unwrapped_CONTROL2(end) + 0.25;
+wrapped_CONTROL2 = wrapToPi(shift_CONTROL2);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control3 Run with k1(proportional) = 100, k2(derivative) = 40, k3(integral) = 0
 [Time_CONTROL3,Data_CONTROL3] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_40_K3_0.csv');
 Time_CONTROL3 = Time_CONTROL3 - Time_CONTROL3(1);
-%Data_CONTROL3(:,2) = unwrap(Data_CONTROL3(:,2) - Data_CONTROL3(1,2));
+unwrapped_CONTROL3 = unwrap(Data_CONTROL3(:,2));
+%shift_CONTROL3 = unwrapped_CONTROL3 - unwrapped_CONTROL3(end) + Data_CONTROL3(end,1);
+shift_CONTROL3 = unwrapped_CONTROL3 - unwrapped_CONTROL3(end) + 0.25;
+wrapped_CONTROL3 = wrapToPi(shift_CONTROL3);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control4 Run with k1(proportional) = 100, k2(derivative) = -10, k3(integral) = 0
 [Time_CONTROL4,Data_CONTROL4] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_100_K2_neg10_K3_0.csv');
 Time_CONTROL4 = Time_CONTROL4 - Time_CONTROL4(1);
-%Data_CONTROL4(:,2) = unwrap(Data_CONTROL4(:,2) - Data_CONTROL4(1,2));
+unwrapped_CONTROL4 = unwrap(Data_CONTROL4(:,2));
+%shift_CONTROL4 = unwrapped_CONTROL4 - unwrapped_CONTROL4(end) + Data_CONTROL4(end,1);
+shift_CONTROL4 = unwrapped_CONTROL4 - unwrapped_CONTROL4(end) + 0.25;
+wrapped_CONTROL4 = wrapToPi(shift_CONTROL4);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control5 Run with k1(proportional) = 150, k2(derivative) = 15, k3(integral) = 0
 [Time_CONTROL5,Data_CONTROL5] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_150_K2_15_K3_0.csv');
 Time_CONTROL5 = Time_CONTROL5 - Time_CONTROL5(1);
-%Data_CONTROL5(:,2) = unwrap(Data_CONTROL5(:,2) - Data_CONTROL5(1,2));
+unwrapped_CONTROL5 = unwrap(Data_CONTROL5(:,2));
+%shift_CONTROL5 = unwrapped_CONTROL5 - unwrapped_CONTROL5(end) + Data_CONTROL5(end,1);
+shift_CONTROL5 = unwrapped_CONTROL5 - unwrapped_CONTROL5(end) + 0.25;
+wrapped_CONTROL5 = wrapToPi(shift_CONTROL5);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control6 Run with k1(proportional) = 200, k2(derivative) = 0, k3(integral) = 0
 [Time_CONTROL6,Data_CONTROL6] = LoadData_CONTROL('Lab 3 Data/CONTROL_K1_200_K2_0_K3_0.csv');
 Time_CONTROL6 = Time_CONTROL6 - Time_CONTROL6(1);
-%Data_CONTROL6(:,2) = unwrap(Data_CONTROL6(:,2) - Data_CONTROL6(1,2));
+unwrapped_CONTROL6 = unwrap(Data_CONTROL6(:,2));
+%shift_CONTROL6 = unwrapped_CONTROL6 - unwrapped_CONTROL6(end) + Data_CONTROL6(end,1);
+shift_CONTROL6 = unwrapped_CONTROL6 - unwrapped_CONTROL6(end);
+wrapped_CONTROL6 = wrapToPi(shift_CONTROL6);
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Control Chosen values of k1 = 3.48 k2 = 16.7
 [Time_CONTROL_Chosen, Data_CONTROL_Chosen] = LoadData_CONTROL('Lab 3 Data/10-7-25_CONTROL_kp_3pt48_kd_16pt6.csv');
 Time_CONTROL_Chosen = Time_CONTROL_Chosen - Time_CONTROL_Chosen(1);
-%Data_CONTROL_Chosen(:,2) = unwrap(Data_CONTROL_Chosen(:,2) - Data_CONTROL_Chosen(1,2));
-%Data_CONTROL_Chosen(:,2) = Data_CONTROL_Chosen(:,2) - Data_CONTROL_Chosen(1,2);
 
 %% GYRO RUNS
 
@@ -260,21 +292,6 @@ angular_position_error_GYRO3 = wrapToPi(theta_gyro0 - theta_enc0);
 
 %% BASE Plotting Section
 
-if BaseSwitch == 1
-	figure()
-	hold on
-	scatter(Data_BASE(:,1),Data_BASE(:,2),'.');
-	grid on
-	plot([min_BASE,max_BASE],[maxPolyline_BASE,minPolyline_BASE],'--')
-	yline(val_b_BASE,'--');
-	hold off
-
-	figure()
-	hold on
-	plot(Time_BASE,Data_BASE(:,1))
-	plot(Time_BASE,Calibrated_Data_BASE)
-	hold off
-end
 
 %% CONTROL Plotting Section
 
@@ -282,81 +299,105 @@ if Control1Switch == 1
 	figure(name='Control1 Kp=50 Kd=15')
 	hold on
 	grid on
-	plot(Time_CONTROL1,Data_CONTROL1(:,2),LineWidth=1.8)
-	plot(Time_CONTROL1,Data_CONTROL1(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL1,wrapped_CONTROL1,LineWidth=1.8)
+	plot(Time_CONTROL1,Data_CONTROL1(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=50, Kd=15 - CONTROL1',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL1(end)])
+	print('Problem_3_3bv_CONTROL1','-dpng','-r600')
 end
 
 if Control2Switch == 1
 	figure(name='Control2 Kp=100 Kd=15')
-	axis square
 	hold on
 	grid on
-	plot(Time_CONTROL2,Data_CONTROL2(:,2),LineWidth=1.8)
-	plot(Time_CONTROL2,Data_CONTROL2(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL2,wrapped_CONTROL2,LineWidth=1.8)
+	plot(Time_CONTROL2,Data_CONTROL2(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=100, Kd=15 - CONTROL2',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL2(end)])
+	print('Problem_3_3bv_CONTROL2','-dpng','-r600')
 end
 
 if Control3Switch == 1
 	figure(name='Control3 Kp=100 Kd=40')
-	axis square
 	hold on
 	grid on
-	plot(Time_CONTROL3,Data_CONTROL3(:,2),LineWidth=1.8)
-	plot(Time_CONTROL3,Data_CONTROL3(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL3,wrapped_CONTROL3,LineWidth=1.8)
+	plot(Time_CONTROL3,Data_CONTROL3(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=100, Kd=40 - CONTROL3',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL3(end)])
+	print('Problem_3_3bv_CONTROL3','-dpng','-r600')
 end
 
 if Control4Switch == 1
 	figure(name='Control4 Kp=100 Kd=-10')
-	axis square
 	hold on
 	grid on
-	plot(Time_CONTROL4,Data_CONTROL4(:,2),LineWidth=1.8)
-	plot(Time_CONTROL4,Data_CONTROL4(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL4,wrapped_CONTROL4,LineWidth=1.8)
+	plot(Time_CONTROL4,Data_CONTROL4(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=100, Kd=10 - CONTROL4',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL4(end)])
+	print('Problem_3_3bv_CONTROL4','-dpng','-r600')
 end
 
 if Control5Switch == 1
 	figure(name='Control5 Kp=150 Kd=15')
-	axis square
 	hold on
 	grid on
-	plot(Time_CONTROL5,Data_CONTROL5(:,2),LineWidth=1.8)
-	plot(Time_CONTROL5,Data_CONTROL5(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL5,wrapped_CONTROL5,LineWidth=1.8)
+	plot(Time_CONTROL5,Data_CONTROL5(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=150, Kd=15 - CONTROL5',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL5(end)])
+	print('Problem_3_3bv_CONTROL5','-dpng','-r600')
 end
 
 if Control6Switch == 1
 	figure(name='Control6 Kp=200 Kd=0')
 	hold on
 	grid on
-	plot(Time_CONTROL6,Data_CONTROL6(:,2),LineWidth=1.8)
-	plot(Time_CONTROL6,Data_CONTROL6(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL6,wrapped_CONTROL6,LineWidth=1.8)
+	plot(Time_CONTROL6,Data_CONTROL6(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=200, Kd=0 - CONTROL6',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL6(end)])
+	print('Problem_3_3biii_CONTROL6','-dpng','-r600')
 end
 
 if ControlChosenSwitch == 1
 	figure(name='Control Chosen Kp=3.48 Kd=16.6')
 	hold on
 	grid on
-	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,2),LineWidth=1.8)
-	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,1),LineWidth=1)
-	xlabel('Time [s]')
-	ylabel('Position [rad]')
+	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,2)+0.06,LineWidth=1.8)
+	plot(Time_CONTROL_Chosen, Data_CONTROL_Chosen(:,1),'r',LineWidth=1)
+	title('S/C Control Angular Position w/ Kp=3.48, Kd=16.6 - Calibrated Control',FontSize=18)
+	xlabel('Time [s]',FontSize=14)
+	ylabel('Position [rad]',FontSize=14)
+	legend('S/C Angular Position','Reference Set Point',Location='northeast')
 	hold off
+	xlim([0,Time_CONTROL_Chosen(end)])
+	print('Problem_3_3d_CONTROL_Chosen','-dpng','-r600')
 end
 
 %% GYRO Plotting Section
