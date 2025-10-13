@@ -6,21 +6,23 @@ clear;clc;close all
 
 % Toggle Switch 0=off, 1=on
 BaseSwitch =	0;
-Control1Switch= 1;
-Control2Switch= 1;
-Control3Switch= 1;
-Control4Switch= 1;
-Control5Switch= 1;
-Control6Switch= 1;
-ControlChosenSwitch = 1;
+Control1Switch= 0;
+Control2Switch= 0;
+Control3Switch= 0;
+Control4Switch= 0;
+Control5Switch= 0;
+Control6Switch= 0;
+ControlChosenSwitch = 0;
 Gyro1Switch =	0; % Gyro1 Auto Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro2Switch =	0; % Gyro2 Auto Frequency = 0.2 [Hz], Current = 1 [A] Andrew's Preferred Plot
 Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
 Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
 Gyro6Switch =	0; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
-Rwheel1Switch = 0;
-Rwheel2Switch = 0;
+Rwheel1Switch = 1; %T=5mNm
+Rwheel2Switch = 1; %T=10mNm
+Rwheel3Switch = 1; %T=15mNm
+Rwheel4Switch = 1; %T=20mNm
 
 %% BASE RUN
 
@@ -33,7 +35,7 @@ Torque_BASE = (Data_BASE(:,3) * TorqueConst_BASE)/1000;
 %Torque_BASE = nonzeros(Torque_BASE);
 Torque_BASE = mean(Torque_BASE);
 % Converting angular velocity to angular acceleration [rad/s^2]
-alpha_BASE = gradient(Data_BASE(:,2), Time_BASE);
+alpha_BASE = gradient((pi/180)*Data_BASE(:,2), Time_BASE);
 %alpha_BASE = nonzeros(alpha_BASE);
 alpha_BASE = mean(alpha_BASE);
 % Calculating MOI of the Base [kg*m^2]
@@ -283,12 +285,83 @@ angular_position_error_GYRO3 = wrapToPi(theta_gyro0 - theta_enc0);
 
 %% REACTION WHEEL RUNS
 
-% Loading Reaction Wheel Test Run with Torque = 0.2
-[Time_RWHEEL1,Data_RWHEEL1] = LoadData_RWHEEL('Lab 3 Data/RWHEEL_T0pt2_Test.csv');
+torque_const_RW = 33.5;
+
+% Loading Reaction Wheel Test Run with Torque = 5
+[Time_RW1,Data_RW1] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T5.csv');
+p = polyfit(Time_RW1,Data_RW1(:,2),1);
+val_b_RW1 = p(2);% This is the bias in the RW
+val_k_RW1 = p(1);% This is the scale factor for calibration
+Polyline_RW1 = polyval(p,Time_RW1);
+% Finding min/max values for plots and slope
+min_RW1 = min(Data_RW1(:,2));
+max_RW1 = max(Data_RW1(:,2));
+minPolyline_RW1 = min(Polyline);
+maxPolyline_RW1 = max(Polyline);
+
+Calibrated_Data_RW1 = (Data_RW1(:,2) - val_b_RW1)/val_k_RW1;
+
+% Calculating MOI of the RW
+MOI_RW1 = (torque_const_RW * mean(Data_RW1(:,3)))/abs(p(1));
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Reaction Wheel Run with Torque = 10
+[Time_RW2,Data_RW2] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T10.csv');
+p = polyfit(Time_RW2,Data_RW2(:,2),1);
+val_b_RW2 = p(2);% This is the bias in the RW
+val_k_RW2 = p(1);% This is the scale factor for calibration
+Polyline_RW2 = polyval(p,Time_RW2);
+% Finding min/max values for plots and slope
+min_RW2 = min(Data_RW2(:,2));
+max_RW2 = max(Data_RW2(:,2));
+minPolyline_RW2 = min(Polyline);
+maxPolyline_RW2 = max(Polyline);
+
+Calibrated_Data_RW2 = (Data_RW2(:,2) - val_b_RW2)/val_k_RW2;
+
+% Calculating MOI of the RW
+MOI_RW2 = (torque_const_RW * mean(Data_RW2(:,3)))/abs(p(1));
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Loading Reaction Wheel Run with Torque = 15
+[Time_RW3,Data_RW3] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T15.csv');
+p = polyfit(Time_RW3,Data_RW3(:,2),1);
+val_b_RW3 = p(2);% This is the bias in the RW
+val_k_RW3 = p(1);% This is the scale factor for calibration
+Polyline_RW3 = polyval(p,Time_RW3);
+% Finding min/max values for plots and slope
+min_RW3 = min(Data_RW3(:,2));
+max_RW3 = max(Data_RW3(:,2));
+minPolyline_RW3 = min(Polyline);
+maxPolyline_RW3 = max(Polyline);
+
+Calibrated_Data_RW3 = (Data_RW3(:,2) - val_b_RW3)/val_k_RW3;
+
+% Calculating MOI of the RW
+MOI_RW3 = (torque_const_RW * mean(Data_RW3(:,3)))/abs(p(1));
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Reaction Wheel Run with Torque = 20
-[Time_RWHEEL2,Data_RWHEEL2] = LoadData_RWHEEL('Lab 3 Data/RWHEEL_T20.csv');
+[Time_RW4,Data_RW4] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T20.csv');
+p = polyfit(Time_RW4,Data_RW4(:,2),1);
+val_b_RW4 = p(2);% This is the bias in the RW
+val_k_RW4 = p(1);% This is the scale factor for calibration
+Polyline_RW4 = polyval(p,Time_RW4);
+% Finding min/max values for plots and slope
+min_RW4 = min(Data_RW4(:,2));
+max_RW4 = max(Data_RW4(:,2));
+minPolyline_RW4 = min(Polyline);
+maxPolyline_RW4 = max(Polyline);
+
+Calibrated_Data_RW4 = (Data_RW4(:,2) - val_b_RW4)/val_k_RW4;
+
+% Calculating MOI of the RW
+MOI_RW4 = (torque_const_RW * mean(Data_RW4(:,3)))/abs(p(1));
+
+
+% Finding Standard Deviation and Mean MOI
+[S, M] = std([MOI_RW1, MOI_RW2, MOI_RW3, MOI_RW4]); %mNm
+
 
 %% BASE Plotting Section
 
@@ -701,6 +774,62 @@ if Gyro6Switch == 1
 end
 
 %% REACTION WHEEL Plotting Section
+
+if Rwheel1Switch == 1
+    figure(name='Angular Velocity Reaction Wheel T5')
+    hold on
+    title('Angular Velocity Reaction Wheel T5',FontSize=18)
+    scatter(Time_RW1,Data_RW1(:,2),'.');
+    plot(Time_RW1, Polyline_RW1, 'r-', 'LineWidth', 1.8);
+    legend('Raw Data', 'Line Fitted Data')
+    xlabel('Time [s]') 
+    ylabel('Angular Velocity [deg/s]')
+    yline(val_b_RW1,'--');
+    axis fill
+    hold off
+end
+
+if Rwheel2Switch == 1
+    figure(name='Angular Velocity Reaction Wheel T10')
+    hold on 
+    title('Angular Velocity Reaction Wheel T10',FontSize=18)
+    scatter(Time_RW2,Data_RW2(:,2),'.');
+    plot(Time_RW2, Polyline_RW2, 'r-', 'LineWidth', 1.8);
+    legend('Raw Data', 'Line Fitted Data')
+    xlabel('Time [s]')
+    ylabel('Angular Velocity [deg/s]')
+    yline(val_b_RW2,'--');
+    axis fill
+    hold off
+end
+
+if Rwheel3Switch == 1
+    figure(name='Angular Velocity Reaction Wheel T15')
+    hold on 
+    title('Angular Velocity Reaction Wheel T15',FontSize=18)
+    scatter(Time_RW3,Data_RW3(:,2),'.');
+    plot(Time_RW3, Polyline_RW3, 'r-', 'LineWidth', 1.8);
+    legend('Raw Data', 'Line Fitted Data')
+    xlabel('Time [s]')
+    ylabel('Angular Velocity [deg/s]')
+    yline(val_b_RW3,'--');
+    axis fill
+    hold off
+end
+
+if Rwheel4Switch == 1
+    figure(name='Angular Velocity Reaction Wheel T20')
+    hold on 
+    title('Angular Velocity Reaction Wheel T20',FontSize=18)
+    scatter(Time_RW4,Data_RW4(:,2),'.');
+    plot(Time_RW4, Polyline_RW4, 'r-', 'LineWidth', 1.8);
+    legend('Raw Data', 'Line Fitted Data')
+    xlabel('Time [s]')
+    ylabel('Angular Velocity [deg/s]')
+    yline(val_b_RW4,'--');
+    axis tight
+    hold off
+end
 
 %% Functions Section
 
