@@ -293,11 +293,6 @@ p = polyfit(Time_RW1,Data_RW1(:,2),1);
 val_b_RW1 = p(2);% This is the bias in the RW
 val_k_RW1 = p(1);% This is the scale factor for calibration
 Polyline_RW1 = polyval(p,Time_RW1);
-% Finding min/max values for plots and slope
-min_RW1 = min(Data_RW1(:,2));
-max_RW1 = max(Data_RW1(:,2));
-minPolyline_RW1 = min(Polyline);
-maxPolyline_RW1 = max(Polyline);
 
 Calibrated_Data_RW1 = (Data_RW1(:,2) - val_b_RW1)/val_k_RW1;
 
@@ -311,11 +306,6 @@ p = polyfit(Time_RW2,Data_RW2(:,2),1);
 val_b_RW2 = p(2);% This is the bias in the RW
 val_k_RW2 = p(1);% This is the scale factor for calibration
 Polyline_RW2 = polyval(p,Time_RW2);
-% Finding min/max values for plots and slope
-min_RW2 = min(Data_RW2(:,2));
-max_RW2 = max(Data_RW2(:,2));
-minPolyline_RW2 = min(Polyline);
-maxPolyline_RW2 = max(Polyline);
 
 Calibrated_Data_RW2 = (Data_RW2(:,2) - val_b_RW2)/val_k_RW2;
 
@@ -329,11 +319,6 @@ p = polyfit(Time_RW3,Data_RW3(:,2),1);
 val_b_RW3 = p(2);% This is the bias in the RW
 val_k_RW3 = p(1);% This is the scale factor for calibration
 Polyline_RW3 = polyval(p,Time_RW3);
-% Finding min/max values for plots and slope
-min_RW3 = min(Data_RW3(:,2));
-max_RW3 = max(Data_RW3(:,2));
-minPolyline_RW3 = min(Polyline);
-maxPolyline_RW3 = max(Polyline);
 
 Calibrated_Data_RW3 = (Data_RW3(:,2) - val_b_RW3)/val_k_RW3;
 
@@ -347,11 +332,6 @@ p = polyfit(Time_RW4,Data_RW4(:,2),1);
 val_b_RW4 = p(2);% This is the bias in the RW
 val_k_RW4 = p(1);% This is the scale factor for calibration
 Polyline_RW4 = polyval(p,Time_RW4);
-% Finding min/max values for plots and slope
-min_RW4 = min(Data_RW4(:,2));
-max_RW4 = max(Data_RW4(:,2));
-minPolyline_RW4 = min(Polyline);
-maxPolyline_RW4 = max(Polyline);
 
 Calibrated_Data_RW4 = (Data_RW4(:,2) - val_b_RW4)/val_k_RW4;
 
