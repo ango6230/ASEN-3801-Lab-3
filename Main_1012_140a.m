@@ -289,12 +289,12 @@ torque_const_RW = 33.5;
 
 % Loading Reaction Wheel Test Run with Torque = 5
 [Time_RW1,Data_RW1] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T5.csv');
-p = polyfit(Time_RW1,Data_RW1(:,2),1);
+p = polyfit(Time_RW1,(pi/180)*Data_RW1(:,2),1);
 val_b_RW1 = p(2);% This is the bias in the RW
 val_k_RW1 = p(1);% This is the scale factor for calibration
 Polyline_RW1 = polyval(p,Time_RW1);
 
-Calibrated_Data_RW1 = (Data_RW1(:,2) - val_b_RW1)/val_k_RW1;
+Calibrated_Data_RW1 = ((pi/180)*Data_RW1(:,2) - val_b_RW1)/val_k_RW1;
 
 % Calculating MOI of the RW
 MOI_RW1 = (torque_const_RW * mean(Data_RW1(:,3)))/abs(p(1));
@@ -302,12 +302,12 @@ MOI_RW1 = (torque_const_RW * mean(Data_RW1(:,3)))/abs(p(1));
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Reaction Wheel Run with Torque = 10
 [Time_RW2,Data_RW2] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T10.csv');
-p = polyfit(Time_RW2,Data_RW2(:,2),1);
+p = polyfit(Time_RW2,(pi/180)*Data_RW2(:,2),1);
 val_b_RW2 = p(2);% This is the bias in the RW
 val_k_RW2 = p(1);% This is the scale factor for calibration
 Polyline_RW2 = polyval(p,Time_RW2);
 
-Calibrated_Data_RW2 = (Data_RW2(:,2) - val_b_RW2)/val_k_RW2;
+Calibrated_Data_RW2 = ((pi/180)*Data_RW2(:,2) - val_b_RW2)/val_k_RW2;
 
 % Calculating MOI of the RW
 MOI_RW2 = (torque_const_RW * mean(Data_RW2(:,3)))/abs(p(1));
@@ -315,12 +315,12 @@ MOI_RW2 = (torque_const_RW * mean(Data_RW2(:,3)))/abs(p(1));
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Reaction Wheel Run with Torque = 15
 [Time_RW3,Data_RW3] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T15.csv');
-p = polyfit(Time_RW3,Data_RW3(:,2),1);
+p = polyfit(Time_RW3,(pi/180)*Data_RW3(:,2),1);
 val_b_RW3 = p(2);% This is the bias in the RW
 val_k_RW3 = p(1);% This is the scale factor for calibration
 Polyline_RW3 = polyval(p,Time_RW3);
 
-Calibrated_Data_RW3 = (Data_RW3(:,2) - val_b_RW3)/val_k_RW3;
+Calibrated_Data_RW3 = ((pi/180)*Data_RW3(:,2) - val_b_RW3)/val_k_RW3;
 
 % Calculating MOI of the RW
 MOI_RW3 = (torque_const_RW * mean(Data_RW3(:,3)))/abs(p(1));
@@ -328,12 +328,12 @@ MOI_RW3 = (torque_const_RW * mean(Data_RW3(:,3)))/abs(p(1));
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Loading Reaction Wheel Run with Torque = 20
 [Time_RW4,Data_RW4] = LoadData_RWHEEL('Lab 3 Data/10-7-25_RWHEEL_T20.csv');
-p = polyfit(Time_RW4,Data_RW4(:,2),1);
+p = polyfit(Time_RW4,(pi/180)*Data_RW4(:,2),1);
 val_b_RW4 = p(2);% This is the bias in the RW
 val_k_RW4 = p(1);% This is the scale factor for calibration
 Polyline_RW4 = polyval(p,Time_RW4);
 
-Calibrated_Data_RW4 = (Data_RW4(:,2) - val_b_RW4)/val_k_RW4;
+Calibrated_Data_RW4 = ((pi/180)*Data_RW4(:,2) - val_b_RW4)/val_k_RW4;
 
 % Calculating MOI of the RW
 MOI_RW4 = (torque_const_RW * mean(Data_RW4(:,3)))/abs(p(1));
