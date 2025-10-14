@@ -19,10 +19,10 @@ Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
 Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
 Gyro6Switch =	0; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
-Rwheel1Switch = 0; %T=5mNm
-Rwheel2Switch = 0; %T=10mNm
-Rwheel3Switch = 0; %T=15mNm
-Rwheel4Switch = 0; %T=20mNm
+Rwheel1Switch = 1; %T=5mNm
+Rwheel2Switch = 1; %T=10mNm
+Rwheel3Switch = 1; %T=15mNm
+Rwheel4Switch = 1; %T=20mNm
 
 %% BASE RUN
 
@@ -766,11 +766,11 @@ if Rwheel1Switch == 1
     figure(name='Angular Velocity Reaction Wheel T5')
     hold on
     title('Angular Velocity Reaction Wheel T5',FontSize=18)
-    scatter(Time_RW1,Data_RW1(:,2),'.');
+    scatter(Time_RW1,(pi/180)*Data_RW1(:,2),'.');
     plot(Time_RW1, Polyline_RW1, 'r-', 'LineWidth', 1.8);
     legend('Raw Data', 'Line Fitted Data')
     xlabel('Time [s]') 
-    ylabel('Angular Velocity [deg/s]')
+    ylabel('Angular Velocity [rad/s]')
     yline(val_b_RW1,'--');
     axis fill
     hold off
@@ -780,11 +780,11 @@ if Rwheel2Switch == 1
     figure(name='Angular Velocity Reaction Wheel T10')
     hold on 
     title('Angular Velocity Reaction Wheel T10',FontSize=18)
-    scatter(Time_RW2,Data_RW2(:,2),'.');
+    scatter(Time_RW2,(pi/180)*Data_RW2(:,2),'.');
     plot(Time_RW2, Polyline_RW2, 'r-', 'LineWidth', 1.8);
     legend('Raw Data', 'Line Fitted Data')
     xlabel('Time [s]')
-    ylabel('Angular Velocity [deg/s]')
+    ylabel('Angular Velocity [rad/s]')
     yline(val_b_RW2,'--');
     axis fill
     hold off
@@ -794,11 +794,11 @@ if Rwheel3Switch == 1
     figure(name='Angular Velocity Reaction Wheel T15')
     hold on 
     title('Angular Velocity Reaction Wheel T15',FontSize=18)
-    scatter(Time_RW3,Data_RW3(:,2),'.');
+    scatter(Time_RW3,(pi/180)*Data_RW3(:,2),'.');
     plot(Time_RW3, Polyline_RW3, 'r-', 'LineWidth', 1.8);
     legend('Raw Data', 'Line Fitted Data')
     xlabel('Time [s]')
-    ylabel('Angular Velocity [deg/s]')
+    ylabel('Angular Velocity [rad/s]')
     yline(val_b_RW3,'--');
     axis fill
     hold off
@@ -808,11 +808,11 @@ if Rwheel4Switch == 1
     figure(name='Angular Velocity Reaction Wheel T20')
     hold on 
     title('Angular Velocity Reaction Wheel T20',FontSize=18)
-    scatter(Time_RW4,Data_RW4(:,2),'.');
+    scatter(Time_RW4,(pi/180)*Data_RW4(:,2),'.');
     plot(Time_RW4, Polyline_RW4, 'r-', 'LineWidth', 1.8);
     legend('Raw Data', 'Line Fitted Data')
     xlabel('Time [s]')
-    ylabel('Angular Velocity [deg/s]')
+    ylabel('Angular Velocity [rad/s]')
     yline(val_b_RW4,'--');
     axis tight
     hold off
