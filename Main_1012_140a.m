@@ -19,10 +19,10 @@ Gyro3Switch =	0; % Gyro3 Auto Frequency = 1 [Hz], Current = 0.5 [A]
 Gyro4Switch =	0; % Gyro4 Manual Frequency = 0.2 [Hz], Current = 0.5 [A]
 Gyro5Switch =	0; % Gyro5 Manual Frequency = 0.2 [Hz], Current = 1 [A]
 Gyro6Switch =	0; % Gyro6 Manual Frequency = 1 [Hz], Current = 0.5 [A] Andrew's Preferred Plot
-Rwheel1Switch = 1; %T=5mNm
-Rwheel2Switch = 1; %T=10mNm
-Rwheel3Switch = 1; %T=15mNm
-Rwheel4Switch = 1; %T=20mNm
+Rwheel1Switch = 0; %T=5mNm
+Rwheel2Switch = 0; %T=10mNm
+Rwheel3Switch = 0; %T=15mNm
+Rwheel4Switch = 0; %T=20mNm
 
 %% BASE RUN
 
