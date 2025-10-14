@@ -347,7 +347,7 @@ maxAngularVel_RW = 4000; %rpm
 maxAngularVel_RW_rad = 4000*(pi/180); %rad/s
 applied_torque = 10e-4; %Nm
 ang_accel_RW = applied_torque/(M/1000);
-t_to_max_vel = maxAngularVel_RW_rad/ang_accel_RW;
+t_to_max_vel = (maxAngularVel_RW_rad/ang_accel_RW)/60; %min
 
 
 %% BASE Plotting Section
